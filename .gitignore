@@ -1,0 +1,16 @@
+# === Java ===
+target/
+*.class
+*.jar
+*.log
+
+# === Node.js / React ===
+node_modules/
+dist/
+build/
+
+# === System Files ===
+.DS_Store
+*.iml
+.idea/
+.env
