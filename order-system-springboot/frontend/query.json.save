@@ -1,0 +1,15 @@
+{
+  "userId": "user123", // 假设用户ID是字符串
+  "items": [
+    {
+      "productId": "1",    // 商品ID，根据你数据库中的实际商品ID来
+      "quantity": 2,
+      "unitPrice": "9.99" // 确保是字符串
+    },
+    {
+      "productId": "2",
+      "quantity": 1,
+      "unitPrice": "19.99"
+    }
+  ]
+}

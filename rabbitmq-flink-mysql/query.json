@@ -1,0 +1,7 @@
+{
+  "orderId": "ORD123456",
+  "userId": "USER789",
+  "productId": "PROD987",
+  "quantity": 2,
+  "unitPrice": "19.99"
+}

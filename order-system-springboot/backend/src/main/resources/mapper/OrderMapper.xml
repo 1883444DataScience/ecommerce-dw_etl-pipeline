@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orders.mapper.OrderMapper">
+
+    <resultMap id="orderResultMap" type="com.example.orders.entity.Order">
+        <id property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insertOrder" parameterType="com.example.orders.entity.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (order_id, user_id, product_id, quantity, unit_price, total_amount, order_status, create_time, update_time)
+        VALUES (#{orderId}, #{userId}, #{productId}, #{quantity}, #{unitPrice}, #{totalAmount}, #{orderStatus}, NOW(), NOW())
+    </insert>
+
+    <select id="selectOrderById" parameterType="java.lang.Long" resultMap="orderResultMap">
+        SELECT id, order_id, user_id, product_id, quantity, unit_price, total_amount, order_status, create_time, update_time
+        FROM orders
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectOrdersByOrderId" parameterType="java.lang.String" resultMap="orderResultMap">
+        SELECT id, order_id, user_id, product_id, quantity, unit_price, total_amount, order_status, create_time, update_time
+        FROM orders
+        WHERE order_id = #{orderId}
+        ORDER BY create_time ASC
+    </select>
+
+    <select id="selectOrdersByUserId" parameterType="java.lang.String" resultMap="orderResultMap">
+        SELECT id, order_id, user_id, product_id, quantity, unit_price, total_amount, order_status, create_time, update_time
+        FROM orders
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectAllOrders" resultMap="orderResultMap">
+        SELECT id, order_id, user_id, product_id, quantity, unit_price, total_amount, order_status, create_time, update_time
+        FROM orders
+    </select>
+
+    <update id="updateOrder" parameterType="com.example.orders.entity.Order">
+        UPDATE orders
+        <set>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteOrderById" parameterType="java.lang.Long">
+        DELETE FROM orders
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteOrdersByOrderId" parameterType="java.lang.String">
+        DELETE FROM orders
+        WHERE order_id = #{orderId}
+    </delete>
+
+    <update id="updateOrderStatusByOrderId">
+        UPDATE orders
+        SET order_status = #{status}, update_time = NOW()
+        WHERE order_id = #{orderId}
+    </update>
+
+    <update id="updateOrderItemStatus">
+        UPDATE orders
+        SET order_status = #{status}, update_time = NOW()
+        WHERE order_id = #{orderId} AND product_id = #{productId}
+    </update>
+
+    <select id="calculateTotalAmountByOrderId" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+        SELECT SUM(total_amount)
+        FROM orders
+        WHERE order_id = #{orderId}
+    </select>
+
+</mapper>

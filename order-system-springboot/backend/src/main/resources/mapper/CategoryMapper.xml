@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orders.mapper.CategoryMapper">
+
+    <resultMap id="categoryResultMap" type="com.example.orders.entity.Category">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insertCategory" parameterType="com.example.orders.entity.Category" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO categories (name, parent_id, created_at, updated_at)
+        VALUES (#{name}, #{parentId}, NOW(), NOW())
+    </insert>
+
+    <select id="selectCategoryById" parameterType="java.lang.Long" resultMap="categoryResultMap">
+        SELECT id, name, parent_id, created_at, updated_at
+        FROM categories
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectAllCategories" resultMap="categoryResultMap">
+        SELECT id, name, parent_id, created_at, updated_at
+        FROM categories
+    </select>
+
+    <select id="selectCategoriesByParentId" parameterType="java.lang.Long" resultMap="categoryResultMap">
+        SELECT id, name, parent_id, created_at, updated_at
+        FROM categories
+        WHERE parent_id = #{parentId}
+    </select>
+
+    <update id="updateCategory" parameterType="com.example.orders.entity.Category">
+        UPDATE categories
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            updated_at = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteCategoryById" parameterType="java.lang.Long">
+        DELETE FROM categories
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

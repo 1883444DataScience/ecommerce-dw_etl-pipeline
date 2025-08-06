@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orders.mapper.OrderItemMapper">
+
+    <resultMap id="orderItemResultMap" type="com.example.orders.entity.OrderItem">
+        <id property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="quantity" column="quantity"/>
+        <result property="totalPrice" column="total_price"/>
+    </resultMap>
+
+    <insert id="insertOrderItem" parameterType="com.example.orders.entity.OrderItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO order_items (order_id, product_id, product_name, unit_price, quantity, total_price)
+        VALUES (#{orderId}, #{productId}, #{productName}, #{unitPrice}, #{quantity}, #{totalPrice})
+    </insert>
+
+    <select id="selectOrderItemsByOrderId" parameterType="java.lang.Long" resultMap="orderItemResultMap">
+        SELECT id, order_id, product_id, product_name, unit_price, quantity, total_price
+        FROM order_items
+        WHERE order_id = #{orderId}
+    </select>
+
+    <select id="selectOrderItemById" parameterType="java.lang.Long" resultMap="orderItemResultMap">
+        SELECT id, order_id, product_id, product_name, unit_price, quantity, total_price
+        FROM order_items
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateOrderItem" parameterType="com.example.orders.entity.OrderItem">
+        UPDATE order_items
+        <set>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="totalPrice != null">total_price = #{totalPrice},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteOrderItemById" parameterType="java.lang.Long">
+        DELETE FROM order_items
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteOrderItemsByOrderId" parameterType="java.lang.Long">
+        DELETE FROM order_items
+        WHERE order_id = #{orderId}
+    </delete>
+
+</mapper>
